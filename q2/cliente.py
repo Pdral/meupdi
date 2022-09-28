@@ -1,4 +1,5 @@
 import socket, json
+import time
 
 
 class Client:
@@ -11,6 +12,10 @@ class Client:
         self.s.connect((server_ip, server_port))
         nick_dict = {'Comando': '/ENTRAR', 'Nick': nick}
         self.s.sendall(bytes(json.dumps(nick_dict), 'utf-8'))
+
+    def instrucoes(self):
+        print("\nVocê pode escrever uma mensagem ou utilizar um dos comandos abaixo:")
+        print("/USUARIOS, /SAIR\n")
 
     def enviarMensagem(self, msg):
         msg_dict = {'Comando': '/MENSAGEM', 'Mensagem': msg}
@@ -33,4 +38,5 @@ class Client:
     def sair(self):
         sair_dict = {'Comando': '/SAIR'}
         self.s.sendall(bytes(json.dumps(sair_dict), 'utf-8'))
+        time.sleep(3)
         self.s.close()

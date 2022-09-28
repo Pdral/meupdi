@@ -1,4 +1,4 @@
-import threading, time, sys
+import threading, time
 from cliente import Client
 
 sair = False
@@ -7,14 +7,11 @@ msgs = []
 
 def interface():
     while True:
-        print("Você pode escrever uma mensagem ou utilizar um dos comandos abaixo:")
-        print("/USUARIOS, /SAIR")
         msg = input()
         if msg == '/USUARIOS':
             cliente.listar()
         elif msg == '/SAIR':
             sair = True
-            time.sleep(3)
             cliente.sair()
             print('Você foi desconectado do chat')
             break
@@ -22,7 +19,7 @@ def interface():
             cliente.enviarMensagem(msg)
             print("Mensagem enviada com sucesso!")
         print()
-        time.sleep(3)
+        time.sleep(1)
 
 
 def recebeMensagem():
@@ -30,21 +27,24 @@ def recebeMensagem():
         if sair: break
         msg_dict = cliente.receberMensagem()
         if msg_dict is not None:
+            time.sleep(0.5)
             if msg_dict['Tipo'] == 0:
                 msg = msg_dict['Conteúdo']
                 msgs.append(msg)
-                print("Uma mensagem foi recebida!")
-                print('CHAT:')
+                print("Uma mensagem foi recebida!\n")
+                print('---CHAT---')
                 if len(msgs) > 4:
                     lista = msgs[-5:]
                 else:
                     lista = msgs
                 for mensagem in lista:
                     print(mensagem)
+                print('----------')
             else:
                 print("Lista de usuários:")
                 for user in msg_dict['Conteúdo']: print(user)
             print()
+            cliente.instrucoes()
 
 
 HOST = 'localhost'
@@ -55,10 +55,7 @@ print("Para começar, informe seu nickname: ")
 nick = input()
 cliente.entrar(HOST, PORT, nick)
 print("Conectado com sucesso!\n")
-t1 = threading.Thread(target=recebeMensagem)
+t1 = threading.Thread(target=recebeMensagem, daemon=True)
 t2 = threading.Thread(target=interface)
 t1.start()
 t2.start()
-while t1.is_alive() and t2.is_alive(): pass
-print("Aquicabou")
-sys.exit()
