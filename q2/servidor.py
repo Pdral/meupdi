@@ -73,6 +73,7 @@ PORT = 1234
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind((HOST, PORT))
 sock.listen()
+print("Servidor iniciado com sucesso!")
 while True:
     conn, addr = sock.accept()
     t = threading.Thread(target=client_thread, args=(conn,), daemon=True)

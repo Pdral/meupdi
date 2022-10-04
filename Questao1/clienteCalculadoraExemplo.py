@@ -6,7 +6,7 @@ print("Para começar, insira o primeiro número da operação: ")
 n1 = input()
 
 print("Em seguida, informe a operação desejada: ")
-op = input();
+op = input()
 
 print("Por fim, insira o segundo número da operação: ")
 n2 = input()
@@ -15,16 +15,12 @@ SERVER_HOST = "127.0.0.1"
 SERVER_PORT = 1234
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.settimeout(10)
+sock.settimeout(20)
 
+sock.sendto(bytes(n1 + ' ' + op + ' ' + n2, 'utf-8'), (SERVER_HOST, SERVER_PORT))
 try:
-    sock.sendto(bytes(n1 + ' ' + op + ' ' + n2, 'utf-8'), (SERVER_HOST, SERVER_PORT))
-except:
-    print("Erro de conexão")
-try:
-    response, address = sock.recvfrom(1024)
-    code, return_msg = response.decode('utf-8').split(":")
-    print(response)
+    response, address = sock.recvfrom(4096)
+    code, return_msg = response.decode('utf-8').split(";")
 
     if(code == '0'):
         print("\nResposta recebida!")
