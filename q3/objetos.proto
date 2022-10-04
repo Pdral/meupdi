@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message Planta {
+  int32 agua = 1;
+  int32 agua_min = 2;
+  int32 luz_min = 3;
+  int32 temp_min = 4;
+  int32 temp_max = 5;
+}
+
+message Lampada {
+  int32 code = 1;
+  int32 luz = 2;
+}
+
+message Sensor {
+  bool ler = 1;
+}
+
+message Aquecedor {
+  int32 temp = 1;
+}
+
+
