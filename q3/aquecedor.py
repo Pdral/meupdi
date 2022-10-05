@@ -1,4 +1,4 @@
-import threading, socket, struct, json
+import threading, socket, struct, json, atexit
 
 MCAST_GRP = "225.0.0.1"
 MCAST_Port = 1234
@@ -19,10 +19,17 @@ def recebe_multi(multi_sock):
 
 
 def recebe_gateway(sock, sock_temp):
+    print("Aquecedor iniciado com sucesso!")
     while True:
         data, end = sock.recvfrom(4096)
         temp = data.decode('utf-8')
         sock_temp.sendto(bytes(temp, 'utf-8'), (MCAST_GRP, 1235))
+
+
+def excluir(multi_sock):
+    msg_dict = {"Code": 3}
+    multi_sock.sendto(bytes(json.dumps(msg_dict), 'utf-8'), (MCAST_GRP, MCAST_Port))
+    multi_sock.close()
 
 
 multi_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -36,7 +43,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((LocalIP, 1239))
 
 sock_temp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((MCAST_GRP, 1235))
+sock_temp.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock_temp.bind(('', 1235))
+sock_temp.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+atexit.register(excluir, multi_sock)
 
 t1 = threading.Thread(target=recebe_multi, daemon=True, args=(multi_sock,))
 t1.start()

@@ -1,4 +1,4 @@
-import threading, socket, struct, json
+import threading, socket, struct, json, atexit
 
 MCAST_GRP = "225.0.0.1"
 MCAST_Port = 1234
@@ -19,14 +19,22 @@ def recebe_multi(multi_sock):
 
 
 def recebe_gateway(sock, sock_luz):
+    print("Lâmpada iniciada com sucesso!")
     while True:
         data, end = sock.recvfrom(4096)
         msg = json.loads(data.decode('utf-8'))
         if msg['Code'] == 1:
-            sock.sendto(bytes(luz, 'utf-8'), end)
+            pkg = {'Tipo': 4, 'Luz': int(luz)}
+            sock.sendto(bytes(json.dumps(pkg), 'utf-8'), end)
         elif msg['Code'] == 2:
             luz = msg['Luz']
             sock_luz.sendto(bytes(luz, 'utf-8'), (MCAST_GRP, 1236))
+
+
+def excluir(multi_sock):
+    msg_dict = {"Code": 3}
+    multi_sock.sendto(bytes(json.dumps(msg_dict), 'utf-8'), (MCAST_GRP, MCAST_Port))
+    multi_sock.close()
 
 
 multi_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -40,7 +48,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((LocalIP, 1240))
 
 sock_luz = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((MCAST_GRP, 1236))
+sock_luz.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock_luz.bind(('', 1236))
+sock_luz.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+atexit.register(excluir, multi_sock)
 
 t1 = threading.Thread(target=recebe_multi, daemon=True, args=(multi_sock,))
 t1.start()

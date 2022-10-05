@@ -13,6 +13,7 @@ class Cacto:
         self.perigo_agua = 0
         self.perigo_luz = 0
         self.perigo_temp = 0
+        self.name = 'Cacto'
 
     def consome_agua(self):
         while self.agua > 0:
@@ -37,3 +38,8 @@ class Cacto:
             self.perigo_temp = 0
         if self.perigo_agua+self.perigo_luz+self.perigo_temp > 9:
             self.viva = False
+
+    def cria_dict(self):
+        data = {'agua': self.agua, 'agua_min': self.agua_min, 'luz': self.luz_min,
+                'temp_min': self.temp_min, 'temp_max': self.temp_max, 'name': self.name}
+        return data
