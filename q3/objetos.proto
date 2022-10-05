@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+message Planta {
+  int32 agua = 1;
+  int32 agua_min = 2;
+  int32 luz_min = 3;
+  int32 temp_min = 4;
+  int32 temp_max = 5;
+  string name = 6;
+}
+
+message Lampada {
+  int32 code = 1;
+  int32 luz = 2;
+}
+
+message Sensor {
+  int32 temp = 1;
+}
+
+message Objetos{
+  repeated Planta plantas = 1;
+  Lampada lampada = 2;
+  Sensor sensor = 3;
+}
+
+enum Tipo{
+  OBJETO = 0;
+  REGAR = 1;
+  BUSCA = 2;
+}
+
+message Request{
+  int32 id = 1;
+  bool modificar = 2;
+  int32 value = 3;
+  Tipo tipo = 4;
+}
+
+message Response{
+  string msg = 1;
+  bool erro = 2;
+  Objetos objetos = 3;
+}
+
+
