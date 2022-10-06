@@ -7,6 +7,7 @@ message Planta {
   int32 temp_min = 4;
   int32 temp_max = 5;
   string name = 6;
+  int32 vida = 7;
 }
 
 message Lampada {
@@ -25,13 +26,22 @@ message Objetos{
 }
 
 enum Tipo{
-  OBJETO = 0;
+  NADA = 0;
+  OBJETO = 3;
   REGAR = 1;
   BUSCA = 2;
 }
 
+enum Objeto{
+  NOTH = 0;
+  PLANTA = 4;
+  SENSOR = 1;
+  AQUECEDOR = 2;
+  LAMPADA = 3;
+}
+
 message Request{
-  int32 id = 1;
+  Objeto objeto = 1;
   bool modificar = 2;
   int32 value = 3;
   Tipo tipo = 4;

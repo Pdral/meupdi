@@ -16,9 +16,10 @@ class Roseira:
         self.name = 'Roseira'
 
     def consome_agua(self):
-        while self.agua > 0:
-            self.agua -= 1
-            time.sleep(10)
+        while self.viva:
+            if self.agua > 0:
+                self.agua -= 1
+            time.sleep(30)
 
     def regar(self):
         self.agua = 5
@@ -32,7 +33,7 @@ class Roseira:
             self.perigo_luz += 1
         else:
             self.perigo_luz = 0
-        if temp_amb not in [range(self.temp_min, self.temp_max)]:
+        if temp_amb not in range(self.temp_min, self.temp_max):
             self.perigo_temp += 1
         else:
             self.perigo_temp = 0
@@ -41,5 +42,6 @@ class Roseira:
 
     def cria_dict(self):
         data = {'agua': self.agua, 'agua_min': self.agua_min, 'luz': self.luz_min,
-                'temp_min': self.temp_min, 'temp_max': self.temp_max, 'name': self.name}
+                'temp_min': self.temp_min, 'temp_max': self.temp_max, 'name': self.name,
+                'vida': 10-(self.perigo_agua+self.perigo_temp+self.perigo_temp)}
         return data
