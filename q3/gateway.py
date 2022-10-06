@@ -35,7 +35,6 @@ def recebe_sock(sock, conn):
         tipo = data.pop('Tipo')
         if tipo == 2:
             temperatura.temp = data['Temp']
-            print(temperatura.temp)
         elif tipo == 1:
             envia_planta(data, conn)
         elif tipo == 4:

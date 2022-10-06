@@ -8,7 +8,7 @@ class Roseira:
         self.agua = 3
         self.luz_min = 3
         self.temp_min = 21
-        self.temp_max = 28
+        self.temp_max = 29
         self.viva = True
         self.perigo_agua = 0
         self.perigo_luz = 0

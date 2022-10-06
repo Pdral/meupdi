@@ -35,7 +35,6 @@ def recebe_temp(sock_temp):
     while temperatura.run:
         try:
             temperatura.temp = int(sock_temp.recv(4096).decode('utf-8'))
-            print(temperatura.temp)
         except:
             pass
 

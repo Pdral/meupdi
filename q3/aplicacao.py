@@ -49,14 +49,20 @@ while True:
             print(response.msg + str(response.objetos.sensor.temp) + '\n')
     elif opc == 3:
         print("Informe o valor desejado para a temperatura (10-40):")
-        v = int(input())
-        request.objeto = objetos_pb2.AQUECEDOR
-        request.tipo = objetos_pb2.OBJETO
-        request.value = v
-        sock.sendall(request.SerializeToString())
-        response.ParseFromString(sock.recv(4096))
-        time.sleep(3)
-        print(response.msg)
+        try:
+            v = int(input())
+            if v not in range(10, 41):
+                print("Valor inválido!")
+            else:
+                request.objeto = objetos_pb2.AQUECEDOR
+                request.tipo = objetos_pb2.OBJETO
+                request.value = v
+                sock.sendall(request.SerializeToString())
+                response.ParseFromString(sock.recv(4096))
+                time.sleep(3)
+                print(response.msg)
+        except:
+            print("O valor informado não foi um inteiro!")
     elif opc == 4:
         request.objeto = objetos_pb2.LAMPADA
         request.tipo = objetos_pb2.OBJETO
@@ -70,15 +76,22 @@ while True:
             print(response.msg + str(response.objetos.lampada.luz) + '\n')
     elif opc == 5:
         print("Informe o valor desejado para a luminosidade (1-5):")
-        v = int(input())
-        request.objeto = objetos_pb2.LAMPADA
-        request.tipo = objetos_pb2.OBJETO
-        request.value = v
-        request.modificar = True
-        sock.sendall(request.SerializeToString())
-        response.ParseFromString(sock.recv(4096))
-        time.sleep(3)
-        print(response.msg)
+        try:
+            v = int(input())
+            if v not in range(1, 6):
+                print("Valor inválido!")
+            else:
+                request.objeto = objetos_pb2.LAMPADA
+                request.tipo = objetos_pb2.OBJETO
+                request.value = v
+                request.modificar = True
+                sock.sendall(request.SerializeToString())
+                response.ParseFromString(sock.recv(4096))
+                time.sleep(3)
+                print(response.msg)
+        except:
+            print("O valor informado não foi um inteiro!")
+
     elif opc == 6:
         request.tipo = objetos_pb2.REGAR
         sock.sendall(request.SerializeToString())

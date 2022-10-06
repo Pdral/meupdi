@@ -28,10 +28,8 @@ def recebe_gateway(sock, sock_temp):
     while temperatura.run:
         try:
             data, end = sock.recvfrom(4096)
-            print("Recebi")
             temperatura.temp = int(data.decode('utf-8'))
             sock_temp.sendto(bytes(str(temperatura.temp), 'utf-8'), (MCAST_GRP, 1335))
-            print("Mandei")
         except:
             pass
 
