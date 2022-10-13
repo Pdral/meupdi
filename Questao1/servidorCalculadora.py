@@ -31,6 +31,9 @@ while True:
             if(operador not in operacoes):
                 return_msg = "Operador inválido!"
 
+            elif operador == "/" and num2 == 0:
+                return_msg = "Não é possível realizar divisão por 0"
+
             # Computação da operação requisitada
             else:
                 resultado = 0
